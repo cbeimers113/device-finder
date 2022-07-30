@@ -2,11 +2,12 @@ import nmap
 import os
 import socket
 
-from device import Device
-from log import Log
-
+from src.device import Device
+from src.log import Log
+from src.notification import NotificationManager
 
 log = Log()
+note_man = NotificationManager()
 
 
 def get_inet_address():
@@ -58,4 +59,4 @@ def get_devices():
 
 
 for device in get_devices():
-    print(f'{device}\n')
+    note_man.push(str(device))
