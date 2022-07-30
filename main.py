@@ -1,5 +1,6 @@
 import nmap
 import os
+import socket
 
 from device import Device
 from log import Log
@@ -7,29 +8,28 @@ from log import Log
 
 log = Log()
 
+
 def get_inet_address():
     """Get the network address to scan with nmap."""
-    data = os.popen('ifconfig').read()
-    wlan_index = data.find('wl')
-    ip_a = None
-
-    # If we're on a wireless network, extract the network address
-    if wlan_index != -1:
-        ip_a = data[wlan_index:]
-        ip_a = ip_a[ip_a.index('inet '):ip_a.index('netmask')]
-        ip_a = ip_a[5:ip_a.rindex('.')] + '.0/24'
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip_a = s.getsockname()[0]
+    ip_a = ip_a[5:ip_a.rindex('.')] + '.0/24'
+    s.close()
 
     return ip_a
 
+
 def get_devices():
     """Get a list of connected devices."""
-    nmap_address = get_inet_address()
+    inet_address = get_inet_address()
+    print(inet_address)
     devices = []
 
-    if nmap_address:
+    if inet_address:
         nm = nmap.PortScanner()
         try:
-            nm.scan(nmap_address, arguments='-sP')['scan']
+            nm.scan(inet_address, arguments='-sP')['scan']
 
             # Load devices that are on the network
             for ip_address in nm.all_hosts():
@@ -46,7 +46,7 @@ def get_devices():
 
                 devices.append(
                     Device(device_name, mac_address,
-                            ip_address, manufacturer)
+                           ip_address, manufacturer)
                 )
 
         # Catch any errors with nmap
