@@ -14,7 +14,7 @@ def get_inet_address():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     ip_a = s.getsockname()[0]
-    ip_a = ip_a[5:ip_a.rindex('.')] + '.0/24'
+    ip_a = ip_a[:ip_a.rindex('.')] + '.0/24'
     s.close()
 
     return ip_a
@@ -57,4 +57,5 @@ def get_devices():
     return devices
 
 
-print(get_devices())
+for device in get_devices():
+    print(f'{device}\n')
