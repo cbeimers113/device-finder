@@ -24,5 +24,28 @@ class Device:
         """Get the device's manufacturer."""
         return self._manufacturer
 
+    def __eq__(self, other):
+        """Equality comparison."""
+        return self._device_name == other._device_name and \
+            self._mac_address == other._mac_address and \
+            self._ip_address == other._ip_address and \
+            self._manufacturer == other._manufacturer
+
+    def __gt__(self, other):
+        """Greater than comparison, compare IP address."""
+        return self._ip_address > other._ip_address
+
+    def __lt__(self, other):
+        """Less than comparison, compare IP address."""
+        return self._ip_address < other._ip_address
+
+    def __ge__(self, other):
+        """Greater than or equal to comparison."""
+        return self > other or self == other
+
+    def __le__(self, other):
+        """Less than or equal to comparison."""
+        return self < other or self == other
+
     def __str__(self):
         return f'Name: {self._device_name}\nMAC address: {self._mac_address}\nIP address: {self._ip_address}\nManufacturer: {self._manufacturer}'
