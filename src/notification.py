@@ -15,7 +15,7 @@ class NotificationManager:
 
         if os.path.exists(CONFIG_FILE):
             with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
-                self._api_key = f.read()
+                self._api_key = f.read().strip()
 
         if not self._api_key:
             self._api_key = input('Enter PushBullet API key: ')
