@@ -1,5 +1,4 @@
 import nmap
-import os
 import socket
 
 from src.device import Device
@@ -24,7 +23,6 @@ def get_inet_address():
 def get_devices():
     """Get a list of connected devices."""
     inet_address = get_inet_address()
-    print(inet_address)
     devices = []
 
     if inet_address:
@@ -58,5 +56,19 @@ def get_devices():
     return devices
 
 
-for device in get_devices():
-    note_man.push(str(device))
+devices = []
+prev_devices = []
+
+while True:
+    devices = get_devices()
+
+    if sorted(devices) != sorted(prev_devices):
+        for device in devices:
+            if device not in prev_devices:
+                note_man.push('Connected to Network:', str(device))
+
+        for device in prev_devices:
+            if device not in devices:
+                note_man.push('Disconnected from Network:', str(device))
+
+    prev_devices = devices

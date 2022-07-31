@@ -25,12 +25,6 @@ class NotificationManager:
 
         self._pb = PushBullet(self._api_key)
 
-    def push(self, message):
+    def push(self, title, message):
         """Send a notification."""
-        self._pb.push_note('LadBot', message)
-
-
-try:
-    pb = PushBullet('e')
-except Exception as e:
-    print(type(e))
+        self._pb.push_note(title, message)
